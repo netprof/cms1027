@@ -1,5 +1,7 @@
 import { Component, signal } from '@angular/core';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { filter } from 'rxjs';
 import { ToastModule } from 'primeng/toast';
 
 export interface NavItem {
@@ -22,7 +24,9 @@ export interface NavGroup {
   styleUrl: './app.scss',
 })
 export class App {
-  protected readonly collapsed = signal(false);
+  // Desktop: slim (icon-only) sidebar; mobile: off-canvas sidebar open
+  protected readonly slim = signal(false);
+  protected readonly mobileOpen = signal(false);
 
   // Sidebar nav: add new features under the appropriate group
   protected readonly navGroups: NavGroup[] = [
@@ -34,18 +38,21 @@ export class App {
     },
   ];
 
-  protected readonly openGroups = signal<Set<string>>(new Set(['admin']));
-
-  protected toggleGroup(key: string): void {
-    this.openGroups.update((set) => {
-      const next = new Set(set);
-      if (next.has(key)) next.delete(key);
-      else next.add(key);
-      return next;
-    });
+  constructor(router: Router) {
+    // Close the mobile menu after navigation
+    router.events
+      .pipe(
+        filter((e) => e instanceof NavigationEnd),
+        takeUntilDestroyed(),
+      )
+      .subscribe(() => this.mobileOpen.set(false));
   }
 
-  protected toggleSidebar(): void {
-    this.collapsed.update((v) => !v);
+  protected toggleSlim(): void {
+    this.slim.update((v) => !v);
+  }
+
+  protected toggleMobile(): void {
+    this.mobileOpen.update((v) => !v);
   }
 }

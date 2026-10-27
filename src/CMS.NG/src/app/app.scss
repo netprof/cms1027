@@ -1,95 +1,305 @@
+// Sidebar tokens (dark menu, Ultima-like)
 .layout {
+  --sb-width: 16.5rem;
+  --sb-slim-width: 4.75rem;
+  --sb-bg: #111827;
+  --sb-border: rgba(255, 255, 255, 0.06);
+  --sb-text: rgba(255, 255, 255, 0.78);
+  --sb-text-muted: rgba(255, 255, 255, 0.45);
+  --sb-hover-bg: rgba(255, 255, 255, 0.06);
+  --sb-active-bg: color-mix(in srgb, var(--p-primary-500) 18%, transparent);
+  --sb-active-text: var(--p-primary-300);
+  --sb-radius: 8px;
+
   display: flex;
   min-height: 100vh;
 }
 
-.sidebar {
-  width: 214px;
-  flex-shrink: 0;
-  background: #1e293b;
-  color: #e2e8f0;
-  transition: width 0.2s;
+/* ---- Sidebar ---- */
 
-  .collapsed & {
-    width: 56px;
-  }
+.sidebar {
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  width: var(--sb-width);
+  height: 100vh;
+  background: var(--sb-bg);
+  color: var(--sb-text);
+  transition: width 0.2s ease;
+  overflow: hidden;
+  z-index: 1000;
 }
 
-.brand {
+.sidebar-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 64px;
-  padding: 0 0.75rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  height: 4.5rem;
+  padding: 0 1rem 0 1.25rem;
+  border-bottom: 1px solid var(--sb-border);
 }
 
-.brand-name {
-  font-size: 1.25rem;
-  font-weight: 700;
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #fff;
+  text-decoration: none;
+}
+
+.logo-mark {
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  flex-shrink: 0;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--p-primary-400), var(--p-primary-600));
+  font-weight: 800;
+  font-size: 1.125rem;
   color: #fff;
 }
 
-.collapse-btn {
-  border: 0;
-  background: transparent;
-  color: #cbd5e1;
-  cursor: pointer;
-  padding: 0.25rem;
+.logo-text {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
 }
 
-.nav {
-  display: flex;
-  flex-direction: column;
-  padding: 0.5rem 0;
-}
-
-.nav-group,
-.nav-item {
-  display: flex;
-  align-items: center;
-  gap: 0.625rem;
-  width: 100%;
-  padding: 0.75rem 0.875rem;
+.slim-toggle {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
   border: 0;
+  border-radius: 50%;
   background: transparent;
-  color: inherit;
-  font: inherit;
-  font-size: 0.875rem;
-  text-align: left;
-  text-decoration: none;
+  color: var(--sb-text-muted);
   cursor: pointer;
+  transition: background 0.15s, color 0.15s;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.06);
-  }
-}
-
-.nav-item {
-  padding-left: 2rem;
-  color: #cbd5e1;
-
-  .collapsed & {
-    padding-left: 0.875rem;
-  }
-
-  &.active {
-    background: rgba(255, 255, 255, 0.12);
+    background: var(--sb-hover-bg);
     color: #fff;
   }
 }
 
-.nav-label {
+.menu {
   flex: 1;
+  overflow-y: auto;
+  padding: 1rem 0.75rem;
+
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
 }
 
-.chevron {
+.menu-section + .menu-section {
+  margin-top: 1.25rem;
+}
+
+.menu-section-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0 0.75rem 0.5rem;
   font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--sb-text-muted);
+  white-space: nowrap;
+
+  i {
+    font-size: 0.75rem;
+  }
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.25rem;
+  padding: 0.7rem 0.75rem;
+  border-radius: var(--sb-radius);
+  color: var(--sb-text);
+  font-size: 0.9rem;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.15s, color 0.15s;
+
+  i {
+    width: 1.25rem;
+    font-size: 1.05rem;
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  &:hover {
+    background: var(--sb-hover-bg);
+    color: #fff;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--p-primary-400);
+    outline-offset: -2px;
+  }
+
+  &.active {
+    background: var(--sb-active-bg);
+    color: var(--sb-active-text);
+    font-weight: 600;
+  }
+}
+
+/* ---- Slim (icon-only) mode, desktop ---- */
+
+.slim {
+  .sidebar {
+    width: var(--sb-slim-width);
+  }
+
+  .sidebar-header {
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.25rem;
+    height: auto;
+    padding: 0.875rem 0;
+  }
+
+  .logo-text,
+  .menu-label,
+  .menu-section-title span {
+    display: none;
+  }
+
+  .menu-section-title {
+    justify-content: center;
+    padding: 0 0 0.5rem;
+    border-bottom: 1px solid var(--sb-border);
+    margin: 0 0.25rem 0.5rem;
+  }
+
+  .menu-item {
+    justify-content: center;
+    padding: 0.8rem 0;
+  }
+}
+
+/* ---- Main area ---- */
+
+.main {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
 }
 
 .content {
   flex: 1;
-  min-width: 0;
   padding: 1.25rem 1.5rem;
   background: var(--p-surface-50);
+}
+
+.mobile-topbar,
+.mask {
+  display: none;
+}
+
+/* ---- Mobile: off-canvas sidebar ---- */
+
+@media (max-width: 991px) {
+  .sidebar,
+  .slim .sidebar {
+    position: fixed;
+    left: 0;
+    width: var(--sb-width);
+    transform: translateX(-100%);
+    transition: transform 0.2s ease;
+  }
+
+  // Slim does not apply on mobile
+  .slim {
+    .sidebar-header {
+      flex-direction: row;
+      justify-content: space-between;
+      height: 4.5rem;
+      padding: 0 1rem 0 1.25rem;
+    }
+
+    .logo-text,
+    .menu-label,
+    .menu-section-title span {
+      display: inline;
+    }
+
+    .menu-section-title {
+      justify-content: flex-start;
+      padding: 0 0.75rem 0.5rem;
+      border: 0;
+      margin: 0;
+    }
+
+    .menu-item {
+      justify-content: flex-start;
+      padding: 0.7rem 0.75rem;
+    }
+  }
+
+  .slim-toggle {
+    display: none;
+  }
+
+  .mobile-open {
+    .sidebar {
+      transform: none;
+      box-shadow: 0 0 2rem rgba(0, 0, 0, 0.35);
+    }
+
+    .mask {
+      display: block;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.45);
+      z-index: 999;
+    }
+  }
+
+  .mobile-topbar {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    height: 3.5rem;
+    padding: 0 1rem;
+    background: var(--p-surface-0);
+    border-bottom: 1px solid var(--p-surface-200);
+
+    .logo-text {
+      font-size: 1.125rem;
+    }
+  }
+
+  .menu-button {
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--p-text-color);
+    cursor: pointer;
+
+    &:hover {
+      background: var(--p-surface-100);
+    }
+  }
+
+  .content {
+    padding: 1rem;
+  }
 }

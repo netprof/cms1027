@@ -1,45 +1,57 @@
-<div class="layout" [class.collapsed]="collapsed()">
+<div class="layout" [class.slim]="slim()" [class.mobile-open]="mobileOpen()">
   <aside class="sidebar">
-    <div class="brand">
-      @if (!collapsed()) {
-        <span class="brand-name">CMS</span>
-      }
-      <button type="button" class="collapse-btn" (click)="toggleSidebar()" aria-label="切換側邊選單">
-        <i class="pi" [class.pi-angle-left]="!collapsed()" [class.pi-angle-right]="collapsed()"></i>
+    <div class="sidebar-header">
+      <a class="logo" routerLink="/" title="CMS">
+        <span class="logo-mark">C</span>
+        <span class="logo-text">CMS</span>
+      </a>
+      <button
+        type="button"
+        class="slim-toggle"
+        (click)="toggleSlim()"
+        [attr.aria-label]="slim() ? '展開側邊選單' : '收合側邊選單'"
+        [attr.aria-pressed]="slim()"
+      >
+        <i class="pi" [class.pi-angle-double-left]="!slim()" [class.pi-angle-double-right]="slim()"></i>
       </button>
     </div>
 
-    <nav class="nav">
+    <nav class="menu" aria-label="主選單">
       @for (group of navGroups; track group.key) {
-        <button
-          type="button"
-          class="nav-group"
-          [attr.aria-expanded]="openGroups().has(group.key)"
-          (click)="toggleGroup(group.key)"
-        >
-          <i [class]="group.icon"></i>
-          @if (!collapsed()) {
-            <span class="nav-label">{{ group.label }}</span>
-            <i class="pi chevron" [class.pi-angle-down]="openGroups().has(group.key)" [class.pi-angle-right]="!openGroups().has(group.key)"></i>
-          }
-        </button>
-        @if (openGroups().has(group.key)) {
-          @for (item of group.items; track item.route) {
-            <a class="nav-item" [routerLink]="item.route" routerLinkActive="active" [title]="item.label">
-              <i [class]="item.icon"></i>
-              @if (!collapsed()) {
-                <span class="nav-label">{{ item.label }}</span>
-              }
-            </a>
-          }
-        }
+        <section class="menu-section">
+          <div class="menu-section-title" [title]="group.label">
+            <i [class]="group.icon"></i>
+            <span>{{ group.label }}</span>
+          </div>
+          <ul>
+            @for (item of group.items; track item.route) {
+              <li>
+                <a class="menu-item" [routerLink]="item.route" routerLinkActive="active" [title]="item.label">
+                  <i [class]="item.icon"></i>
+                  <span class="menu-label">{{ item.label }}</span>
+                </a>
+              </li>
+            }
+          </ul>
+        </section>
       }
     </nav>
   </aside>
 
-  <main class="content">
-    <router-outlet />
-  </main>
+  <div class="mask" (click)="mobileOpen.set(false)"></div>
+
+  <div class="main">
+    <header class="mobile-topbar">
+      <button type="button" class="menu-button" (click)="toggleMobile()" aria-label="開啟選單">
+        <i class="pi pi-bars"></i>
+      </button>
+      <span class="logo-text">CMS</span>
+    </header>
+
+    <main class="content">
+      <router-outlet />
+    </main>
+  </div>
 </div>
 
 <p-toast position="top-right" />
