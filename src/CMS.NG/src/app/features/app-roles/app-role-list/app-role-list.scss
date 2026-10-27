@@ -1,0 +1,14 @@
+.table-card {
+  padding: 0;
+  overflow: hidden;
+}
+
+.actions-cell {
+  white-space: nowrap;
+}
+
+.drawer-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}

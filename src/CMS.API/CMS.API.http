@@ -1,0 +1,12 @@
+@host = http://localhost:5000
+
+GET {{host}}/api/appRoles
+
+###
+POST {{host}}/api/appRoles/query
+Content-Type: application/json
+
+{ "keyword": "admin" }
+
+###
+GET {{host}}/api/lookups/appUsers

@@ -1,0 +1,7 @@
+// Wrap selected-user chips instead of truncating
+:host ::ng-deep .user-select .p-multiselect-label {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  white-space: normal;
+}

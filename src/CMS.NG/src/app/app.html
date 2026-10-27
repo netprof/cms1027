@@ -1,0 +1,45 @@
+<div class="layout" [class.collapsed]="collapsed()">
+  <aside class="sidebar">
+    <div class="brand">
+      @if (!collapsed()) {
+        <span class="brand-name">CMS</span>
+      }
+      <button type="button" class="collapse-btn" (click)="toggleSidebar()" aria-label="切換側邊選單">
+        <i class="pi" [class.pi-angle-left]="!collapsed()" [class.pi-angle-right]="collapsed()"></i>
+      </button>
+    </div>
+
+    <nav class="nav">
+      @for (group of navGroups; track group.key) {
+        <button
+          type="button"
+          class="nav-group"
+          [attr.aria-expanded]="openGroups().has(group.key)"
+          (click)="toggleGroup(group.key)"
+        >
+          <i [class]="group.icon"></i>
+          @if (!collapsed()) {
+            <span class="nav-label">{{ group.label }}</span>
+            <i class="pi chevron" [class.pi-angle-down]="openGroups().has(group.key)" [class.pi-angle-right]="!openGroups().has(group.key)"></i>
+          }
+        </button>
+        @if (openGroups().has(group.key)) {
+          @for (item of group.items; track item.route) {
+            <a class="nav-item" [routerLink]="item.route" routerLinkActive="active" [title]="item.label">
+              <i [class]="item.icon"></i>
+              @if (!collapsed()) {
+                <span class="nav-label">{{ item.label }}</span>
+              }
+            </a>
+          }
+        }
+      }
+    </nav>
+  </aside>
+
+  <main class="content">
+    <router-outlet />
+  </main>
+</div>
+
+<p-toast position="top-right" />

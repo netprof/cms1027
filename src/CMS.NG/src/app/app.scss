@@ -1,0 +1,95 @@
+.layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 214px;
+  flex-shrink: 0;
+  background: #1e293b;
+  color: #e2e8f0;
+  transition: width 0.2s;
+
+  .collapsed & {
+    width: 56px;
+  }
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+  padding: 0 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.brand-name {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.collapse-btn {
+  border: 0;
+  background: transparent;
+  color: #cbd5e1;
+  cursor: pointer;
+  padding: 0.25rem;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem 0;
+}
+
+.nav-group,
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  width: 100%;
+  padding: 0.75rem 0.875rem;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 0.875rem;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.06);
+  }
+}
+
+.nav-item {
+  padding-left: 2rem;
+  color: #cbd5e1;
+
+  .collapsed & {
+    padding-left: 0.875rem;
+  }
+
+  &.active {
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+  }
+}
+
+.nav-label {
+  flex: 1;
+}
+
+.chevron {
+  font-size: 0.75rem;
+}
+
+.content {
+  flex: 1;
+  min-width: 0;
+  padding: 1.25rem 1.5rem;
+  background: var(--p-surface-50);
+}

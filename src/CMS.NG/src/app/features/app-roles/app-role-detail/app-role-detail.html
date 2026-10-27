@@ -1,0 +1,46 @@
+<div class="page-header">
+  <h2 class="title">檢視角色</h2>
+  <div class="actions">
+    <a pButton severity="secondary" routerLink="/app-roles">
+      <i class="pi pi-arrow-left" pButtonIcon></i><span pButtonLabel>返回</span>
+    </a>
+    @if (role(); as r) {
+      <a pButton [routerLink]="['/app-roles', r.roleId, 'edit']">
+        <i class="pi pi-pencil" pButtonIcon></i><span pButtonLabel>編輯</span>
+      </a>
+    }
+  </div>
+</div>
+
+@if (role(); as r) {
+  <div class="page-card">
+    <h3>角色資料</h3>
+    <dl class="field-grid">
+      <dt>主代碼</dt>
+      <dd>{{ r.pkid }}</dd>
+      <dt>角色代碼</dt>
+      <dd class="role-id">{{ r.roleId }}</dd>
+      <dt>角色名稱</dt>
+      <dd>{{ r.roleName }}</dd>
+      <dt>權限等級</dt>
+      <dd>{{ r.permissionLevel }}</dd>
+      <dt>描述</dt>
+      <dd>{{ r.description || '—' }}</dd>
+    </dl>
+  </div>
+
+  <div class="page-card">
+    <h3>使用者（{{ r.users.length }}）</h3>
+    @if (r.users.length) {
+      <ul class="user-list">
+        @for (u of r.users; track u.userId) {
+          <li>{{ u.userName }} ({{ u.userId }})</li>
+        }
+      </ul>
+    } @else {
+      <p class="empty">尚無使用者</p>
+    }
+  </div>
+} @else if (notFound()) {
+  <div class="page-card">找不到此角色。</div>
+}
